@@ -4,6 +4,9 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.springboot.thymeleafdemo.entity.Employee;
@@ -14,24 +17,45 @@ import com.springboot.thymeleafdemo.service.EmployeeService;
 public class EmployeeController {
 
 	private EmployeeService employeeService;
-	
-	//setup constructor injection, since one constructor autowired is optional
+
+	// setup constructor injection, since one constructor autowired is optional
 	public EmployeeController(EmployeeService theEmployeeService) {
 		employeeService = theEmployeeService;
 	}
-	
+
 	// add mapping for "/list"
 
 	@GetMapping("/list")
 	public String listEmployees(Model theModel) {
-		
+
 		// get employees from db
 		List<Employee> theEmployees = employeeService.findAll();
-		
+
 		// add to the spring model
 		theModel.addAttribute("employees", theEmployees);
-		
-		//will return ..resources/..list-empl.html
-		return "list-employees";
+
+		// will return ..resources/..list-empl.html
+		return "employees/list-employees";
+	}
+
+	@GetMapping("/showFormForAdd")
+	public String showFormForAdd(Model theModel) {
+
+		// create model attribute to bind form data
+		Employee theEmployee = new Employee();
+
+		theModel.addAttribute("employee", theEmployee);
+
+		return "employees/employee-form";
+	}
+
+	@PostMapping("/save")
+	public String saveEmployee(@ModelAttribute("employee") Employee theEmployee) {
+
+		// save the employee
+		employeeService.save(theEmployee);
+
+		// use a redirect to prevent duplicate submissions
+		return "redirect:/employees/list";
 	}
 }
