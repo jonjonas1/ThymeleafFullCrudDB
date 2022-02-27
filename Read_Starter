@@ -2,5 +2,5 @@ https://start.spring.io/
 SpringBoot version select
 Group: com.name
 Artifact: thymeleafdemo
-Dependencies: Spring web starter, Spring Boot DevTools, thymeleaf
+Dependencies: Spring web starter, Spring Boot DevTools, thymeleaf, mysql and dataJpa.
 ==========================
